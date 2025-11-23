@@ -1,0 +1,115 @@
+---
+title: "Ejemplo de LLM Aumentado" 
+---
+
+### Ejemplo práctico: LLM Aumentado con Vercel AI SDK (TypeScript)
+
+Aquí tienes un ejemplo más completo que muestra cómo construir un LLM aumentado que utiliza herramientas dinámicamente:
+
+```typescript
+import { generateText, tool } from 'ai';
+import { openai } from '@ai-sdk/openai';
+import { z } from 'zod';
+
+// Tool 1: Search knowledge base
+const searchKnowledgeBaseTool = tool({
+  description: 'Search the knowledge base for relevant information',
+  parameters: z.object({
+    query: z.string().describe('The search query'),
+  }),
+  execute: async ({ query }) => {
+    // Simulates a knowledge base search (in production, this would query a database)
+    const knowledgeBase = {
+      ai_applications: 'AI is used in healthcare, finance, education, and more',
+      machine_learning: 'ML is a subset of AI focused on learning from data',
+      llm_basics: 'LLMs are large language models trained on vast text data',
+    };
+    
+    const key = Object.keys(knowledgeBase).find(k => 
+      k.toLowerCase().includes(query.toLowerCase())
+    );
+    return key ? knowledgeBase[key as keyof typeof knowledgeBase] : 'No information found';
+  },
+});
+
+// Tool 2: Get current information
+const getCurrentInfoTool = tool({
+  description: 'Get current date and time',
+  parameters: z.object({}),
+  execute: async () => {
+    return new Date().toISOString();
+  },
+});
+
+// Building Block: Augmented LLM with tools
+export async function augmentedLLMQuery(userMessage: string) {
+  const result = await generateText({
+    model: openai('gpt-4-turbo'),
+    tools: {
+      search: searchKnowledgeBaseTool,
+      getCurrentInfo: getCurrentInfoTool,
+    },
+    messages: [
+      {
+        role: 'user',
+        content: userMessage,
+      },
+    ],
+    system: `You are a helpful AI assistant. You have access to tools that allow you to search information and get current data.
+             Use tools when necessary to provide accurate and up-to-date answers.`,
+  });
+
+  return result.text;
+}
+
+// Usage example
+async function main() {
+  const answer = await augmentedLLMQuery(
+    'What are the applications of machine learning?'
+  );
+  console.log('Response:', answer);
+}
+
+main().catch(console.error);
+```
+
+**Key Concepts in This Example:**
+
+- **Dynamic Tool Selection**: The LLM decides which tools to use based on the user's query
+- **Tool Definitions**: Each tool has clear description, parameters, and execution logic
+- **Modularity**: Tools are isolated and can be easily added or modified
+- **Scalability**: This pattern scales to dozens of tools without changing the core logic
+
+> This demonstrates the augmented LLM building block in action—the model intelligently decides when to use external tools versus answering from its training data.
+
+---
+
+### Ejemplo práctico: LLM Aumentado con Vercel AI SDK
+
+Este ejemplo muestra cómo construir un **LLM aumentado** que utiliza herramientas dinámicamente para responder a las consultas del usuario.
+
+#### Conceptos clave:
+
+1. **Selección dinámica de herramientas**: El modelo decide qué herramientas usar según la consulta del usuario.
+2. **Definición de herramientas**: Cada herramienta tiene una descripción clara, parámetros bien definidos y lógica de ejecución.
+3. **Modularidad**: Las herramientas están aisladas y pueden añadirse o modificarse fácilmente.
+4. **Escalabilidad**: Este patrón escala a docenas de herramientas sin cambiar la lógica principal.
+
+#### Descripción del código:
+
+- **Tool 1: Búsqueda en la base de conocimiento**
+  - Simula una búsqueda en una base de datos.
+  - Devuelve información relevante basada en la consulta del usuario.
+
+- **Tool 2: Obtener información actual**
+  - Devuelve la fecha y hora actual.
+
+- **Building Block: LLM aumentado**
+  - Integra las herramientas y utiliza el modelo GPT-4 para generar respuestas.
+  - Decide dinámicamente si usar una herramienta o responder directamente desde su conocimiento.
+
+#### Ejemplo de uso:
+
+El código incluye una función `main()` que muestra cómo usar el LLM aumentado para responder a la consulta: "¿Cuáles son las aplicaciones del aprendizaje automático?".
+
+---

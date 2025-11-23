@@ -1,0 +1,78 @@
+---
+title: "Building Blocks Pattern"
+description: "Este patrón describe los componentes fundamentales (building blocks) utilizados para construir sistemas de inteligencia artificial complejos mediante la combinación de piezas simples como LLMs aumentados, workflows y agentes."
+---
+
+## ¿Qué son los Building Blocks?
+Los **building blocks** (bloques de construcción) son los componentes fundamentales que usamos para crear sistemas de inteligencia artificial más sofisticados. Piensa en ellos como los LEGOS de la IA: piezas simples que, cuando las combinas inteligentemente, crean sistemas complejos y poderosos.
+
+### El Concepto Fundamental
+
+Según Anthropic, en lugar de construir sistemas IA complejos desde cero, deberíamos:
+
+1. **Empezar simple**: Comenzar con los bloques más básicos
+2. **Componer**: Combinarlos de formas estratégicas
+3. **Iterar**: Medir y mejorar solo cuando sea necesario
+
+Como dice el principio clave: *"No se trata de construir el sistema más sofisticado, sino el sistema correcto para tus necesidades"*.
+
+## Building Block 1: El LLM Aumentado (Augmented LLM)
+
+Este es el **bloque fundamental de todos los sistemas agenticos**. Un LLM "aumentado" es simplemente un modelo de lenguaje al que le hemos dado **superpoderes**:
+
+### ¿Qué superpoderes se le dan?
+
+Un LLM aumentado tiene acceso a:
+
+1. **Retrieval (Recuperación de información)**
+   - El modelo puede buscar información externa en lugar de solo usar su conocimiento de entrenamiento
+   - *Ejemplo*: Un chatbot que puede consultar una base de datos de productos antes de responder
+
+2. **Tools (Herramientas)**
+   - El modelo puede usar herramientas externas para realizar acciones
+   - *Ejemplo*: Ejecutar código, hacer llamadas a APIs, acceder a bases de datos
+
+3. **Memory (Memoria)**
+   - El modelo puede recordar información entre conversaciones o mantener contexto
+   - *Ejemplo*: Un asistente que recuerda preferencias del usuario
+
+### Por qué es importante
+
+El LLM aumentado es poderoso porque el modelo **decide dinámicamente**:
+- Qué información necesita buscar
+- Qué herramientas debe usar
+- Qué recordar para el futuro
+
+No nosotros programándolo explícitamente.
+
+### Implementación
+
+Anthropic introduce el **Model Context Protocol (MCP)** como una forma elegante de implementar esto, permitiendo que terceros integren herramientas fácilmente.
+
+```
+┌─────────────────────┐
+│   LLM Base          │
+├─────────────────────┤
+│ + Retrieval         │  ← LLM Aumentado
+│ + Tools             │
+│ + Memory            │
+└─────────────────────┘
+```
+
+<img src="/images/building-blocks.png" alt="Diagrama del LLM aumentado" style={{ maxWidth: '100%', margin: '20px auto', display: 'block' }} />
+
+## ¿Por qué empezamos aquí?
+
+Antes de construir workflows complejos o agentes autónomos, necesitas entender que **todo comienza con un LLM potenciado**. Es como aprender a caminar antes de correr.
+
+En las siguientes secciones exploraremos cómo combinar estos bloques para crear:
+- **Workflows**: Procesos predefinidos (prompt chaining, routing, paralelización)
+- **Agentes**: Sistemas autónomos que toman decisiones dinámicamente
+
+---
+
+**Recuerda**: La complejidad es el enemigo de la confiabilidad. Cada building block que añadas debe mejorar demostrablemente tus resultados.
+
+*Fuente: [Building Effective Agents - Anthropic Engineering](https://www.anthropic.com/engineering/building-effective-agents)*
+
+---
